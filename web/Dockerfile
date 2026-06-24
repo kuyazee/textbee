@@ -29,6 +29,11 @@ COPY . .
 # Set environment variables for building
 ENV NEXT_TELEMETRY_DISABLED 1
 
+# NEXT_PUBLIC_* must be present at build time (Next.js inlines them into the bundle)
+ARG NEXT_PUBLIC_API_BASE_URL
+ARG NEXT_PUBLIC_SITE_URL
+ENV NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL
+ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
 
 # Build the application
 RUN pnpm build
