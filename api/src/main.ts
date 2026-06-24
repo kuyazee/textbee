@@ -58,7 +58,16 @@ async function bootstrap() {
     type: 'service_account',
     projectId: process.env.FIREBASE_PROJECT_ID,
     privateKeyId: process.env.FIREBASE_PRIVATE_KEY_ID,
-    privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+    privateKey: (() => {
+      const k = process.env.FIREBASE_PRIVATE_KEY
+      if (!k) return undefined
+      // Accept either a base64-encoded PEM (no header) or a PEM with escaped newlines.
+      // base64 avoids \n-escaping mangling by env/proxy layers (e.g. Coolify).
+      if (!k.includes('BEGIN PRIVATE KEY')) {
+        return Buffer.from(k, 'base64').toString('utf8')
+      }
+      return k.replace(/\\n/g, '\n')
+    })(),
     clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
     clientId: process.env.FIREBASE_CLIENT_ID,
     authUri: 'https://accounts.google.com/o/oauth2/auth',
