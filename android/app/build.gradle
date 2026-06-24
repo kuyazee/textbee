@@ -52,7 +52,7 @@ android {
             dimension "environment"
             applicationId "com.vernu.sms.dev"
             versionNameSuffix "-dev"
-            buildConfigField "String", "API_BASE_URL", '"https://api.dev.textbee.dev/api/v1/"'
+            buildConfigField "String", "API_BASE_URL", '"https://sms-api.zonily.cloud/api/v1/"'
             buildConfigField "String", "ENVIRONMENT", '"development"'
             resValue "string", "app_name", "textbee.dev (Dev)"
         }
