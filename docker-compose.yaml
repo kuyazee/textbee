@@ -10,8 +10,6 @@ services:
       - MONGO_INITDB_DATABASE=textbee
     volumes:
       - mongodb_data:/data/db
-    networks:
-      - textbee-network
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 30s
@@ -31,8 +29,6 @@ services:
     depends_on:
       textbee-db:
         condition: service_healthy
-    networks:
-      - textbee-network
 
   # NestJS API — Coolify routes sms-api.zonily.cloud -> port 3001
   textbee-api:
@@ -63,8 +59,6 @@ services:
     depends_on:
       textbee-db:
         condition: service_healthy
-    networks:
-      - textbee-network
 
   # Next.js Web — Coolify routes sms.zonily.cloud -> port 3000
   # NEXT_PUBLIC_* are baked at BUILD time: passed as build args AND runtime env.
@@ -89,8 +83,6 @@ services:
       - DATABASE_URL=${DATABASE_URL}
     depends_on:
       - textbee-api
-    networks:
-      - textbee-network
 
   # Redis (SMS queue backend)
   textbee-redis:
@@ -99,8 +91,6 @@ services:
     restart: unless-stopped
     volumes:
       - redis_data:/data
-    networks:
-      - textbee-network
     command: redis-server --appendonly yes
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
@@ -108,10 +98,6 @@ services:
       timeout: 10s
       retries: 3
       start_period: 20s
-
-networks:
-  textbee-network:
-    driver: bridge
 
 volumes:
   mongodb_data:
