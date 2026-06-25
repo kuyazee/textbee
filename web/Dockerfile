@@ -4,7 +4,12 @@ WORKDIR /app
 
 # Install pnpm and required OpenSSL dependencies
 RUN apk add --no-cache openssl openssl-dev
-RUN npm install -g pnpm@9
+RUN npm install -g pnpm@9 && \
+    pnpm config set network-concurrency 3 && \
+    pnpm config set fetch-retries 5 && \
+    pnpm config set fetch-retry-mintimeout 20000 && \
+    pnpm config set fetch-retry-maxtimeout 120000 && \
+    pnpm config set fetch-timeout 600000
 
 # Copy package.json and pnpm-lock.yaml
 COPY package.json pnpm-lock.yaml ./
@@ -18,7 +23,12 @@ WORKDIR /app
 
 # Install pnpm and required OpenSSL dependencies
 RUN apk add --no-cache openssl openssl-dev
-RUN npm install -g pnpm@9
+RUN npm install -g pnpm@9 && \
+    pnpm config set network-concurrency 3 && \
+    pnpm config set fetch-retries 5 && \
+    pnpm config set fetch-retry-mintimeout 20000 && \
+    pnpm config set fetch-retry-maxtimeout 120000 && \
+    pnpm config set fetch-timeout 600000
 
 # Copy dependencies from deps stage
 COPY --from=deps /app/node_modules ./node_modules
@@ -44,7 +54,12 @@ WORKDIR /app
 
 # Install pnpm and required OpenSSL dependencies
 RUN apk add --no-cache openssl openssl-dev
-RUN npm install -g pnpm@9
+RUN npm install -g pnpm@9 && \
+    pnpm config set network-concurrency 3 && \
+    pnpm config set fetch-retries 5 && \
+    pnpm config set fetch-retry-mintimeout 20000 && \
+    pnpm config set fetch-retry-maxtimeout 120000 && \
+    pnpm config set fetch-timeout 600000
 
 # Set environment variables
 ENV NODE_ENV production
